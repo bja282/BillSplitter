@@ -1,43 +1,89 @@
-var isMobile = false;
+/* var isMobile = false;
 if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
 	isMobile = true;
 }
+if(isMobile){
+    console.log('Mobile detected');
+} else {
+    console.log('Desktop detected.');
+} */
 
-function smooth_scrolling() {
-	$('a').click(function(){
-		$('html, body').animate({
-			scrollTop: $( $(this).attr('href') ).offset().top
-		}, 500);
-		return false;
-	});
+var currentScreen = "bill"; // that depends if user is logged in
+
+function hideAllScreens() {
+    $("#identification").hide();
+    $("#bill").hide();
+    $("#history").hide();
+    $("#profile").hide();
+    $("#settings").hide();
 }
 
-function banner_opacity() {
-	var banner_opacity_mouseover = 0.93;
-    var banner_opacity_mouseout = 0.66;
-	var banner = $('#navigation_bar');
-    banner.mouseover(function(){
-		banner.css("opacity", banner_opacity_mouseover);
+function setNavigationBarClick() {
+    $("#billButton").click(function(){
+        if (currentScreen != "bill") {
+            currentScreen = "bill";
+            hideAllScreens();
+            $("#bill").show({duration:500, easing:"swing"});
+        }
     });
-    banner.mouseout(function(){
-		banner.css("opacity", banner_opacity_mouseout);
+    $("#historyButton").click(function(){
+        if (currentScreen != "history") {
+            currentScreen = "history";
+            hideAllScreens();
+            $("#history").show({duration:500, easing:"swing"});
+        }
     });
-	var b_pos = banner.offset().top;
-	$(window).scroll(function (){ // binds the following to when the user scrolls
-		var y = $(this).scrollTop();
-		if(y == 0){
-			banner_opacity_mouseover = 0.93;
-            banner_opacity_mouseout = 0.66;
-		} else {
-			banner_opacity_mouseover = 0.70;
-            banner_opacity_mouseout = 0.5;
-		}
-		banner.stop().animate({
-						'opacity':banner_opacity_mouseout				
-						},400);
-	});
+    $("#profileButton").click(function(){
+        if (currentScreen != "profile") {
+            currentScreen = "profile";
+            hideAllScreens();
+            $("#profile").show({duration:500, easing:"swing"});
+        }
+    });
+    $("#settingsButton").click(function(){
+        if (currentScreen != "settings") {
+            currentScreen = "settings";
+            hideAllScreens({duration:500, easing:"swing"});
+            $("#settings").show({duration:500, easing:"swing"});
+        }
+    });
+    console.log("Current screen is now", currentScreen);
 }
 
+function bindIdentificationButtons() {
+    $("#signupTab").click(function() {
+        $("#signupTab").css({
+            background: "rgba(0, 255, 200, 0.4)",
+        });
+        $("#loginTab").css({
+            background: "rgba(0, 153, 255, 0.315)",
+        });
+        $("#login").hide();
+        $("#signup").show({duration:500, easing:"swing"});
+    });
+    $("#loginTab").click(function() {
+        $("#loginTab").css({
+            background: "rgba(0, 255, 200, 0.4)",
+        });
+        $("#signupTab").css({
+            background: "rgba(0, 153, 255, 0.315)",
+        });
+        $("#signup").hide({duration:500, easing:"swing"});
+        $("#login").show({duration:500, easing:"swing"});
+    });
+}
+
+function identificationScreen() {
+    $(navigation_bar).hide();
+    // defaults to signup
+    $("#login").hide();
+    $("#signupTab").css({
+        background: "rgba(0, 255, 200, 0.4)",
+    });
+    bindIdentificationButtons();
+}
+
+<<<<<<< HEAD
 $(document).ready( function() { 
 	
 	/* executes first */
@@ -66,11 +112,20 @@ $(document).ready( function() {
     $('.userHistory').slideToggle('slow');
   	});
 	
+=======
+$(document).ready(function() { // Executes first
+    console.log('document is ready');
+    hideAllScreens();
+    $('#' + currentScreen).show({duration:500, easing:"swing"});
+>>>>>>> 8486eb4cf5760b00a8b2cd00bcce7cd7976acf59
 });
 
-window.onload = function(){ /* executes secondly */
+window.onload = function(){ // Executes secondly
     console.log('window is loaded');
-    smooth_scrolling();
+    setNavigationBarClick();
+    if (currentScreen == "identification") {
+        identificationScreen();
+    }
 };
 
 $(window).resize(function() {
